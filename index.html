@@ -6,19 +6,100 @@
 
 		<link rel="stylesheet" href="reveal/reveal.css">
         <link rel="stylesheet" href="reveal/simple.css">
+        <link rel="stylesheet" href="highlight/github.min.css">
+
+        <style>
+			.muted {
+				opacity: 0.6;
+			}
+
+			h1, h2, h3, h4 {
+				font-weight: bold !important;
+			}
+			
+			h1 {
+				margin-bottom: 40px !important;
+			}
+
+			p {
+				font-size: 1.3em !important;
+			}
+        </style>
     </head>
     <body>
 		<div class="reveal">
 			<div class="slides">
-				<section></section>
+				<section>
+					<h1>It's Python Somewhere in the World</h1>
+					<h3 class="muted">Datetime Localization in Python</h3>
+				</section>
+
+				<section>
+					<h1>Me</h1>
+
+					<p>Jared Morse - <span class="muted">github.com/jarcoal</span></p>
+					<p>Appointlet - <span class="muted">appointlet.com</span></p>
+				</section>
+
+				<section>
+					<h1>Agenda</h1>
+
+					<ol>
+						<li class="fragment"><p>datetime - <span class="muted">date, time, datetime, strftime</span></p></li>
+						<li class="fragment"><p>tzinfo - <span class="muted">becoming aware</span></p></li>
+						<li class="fragment"><p>pytz - <span class="muted">Olson database in Python</span></p></li>
+						<li class="fragment"><p>Django localization - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
+					</ol>
+				</section>
+
+				<section>
+					<h3>before we begin...</h3>
+					<h1>why localize?</h1>
+				</section>
+
+				<section>
+					<h2>[map of world]</h2>
+				</section>
+
+				<section>
+					<section>
+						<h2>Datetime</h2>
+						<p class="muted">from datetime import date, time, datetime</p>
+					</section>
+
+					<section>
+						<h3>datetime.date<span class="muted">(year, month, day)</span></h3>
+
+						<ul>
+							<li class="fragment">just a date, no time</li>
+						</ul>
+
+					</section>
+
+					<section>
+						<pre><code data-trim>
+from datetime import date
+
+d = date(2013, 7, 9)
+
+d.year 	#2013
+d.month 	#7
+d.day 	#9
+						</code></pre>
+					</section>
+				</section>
 			</div>
 		</div>
 
+		<script src="reveal/head.min.js"></script>
 		<script src="reveal/reveal.js"></script>
 
 		<script>
 			Reveal.initialize({
-				transition: 'fade'
+				transition: 'fade',
+				transitionSpeed: 'fast',
+				history: true,
+				dependencies: [{ src: 'highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }],
 			});
 		</script>
     </body>

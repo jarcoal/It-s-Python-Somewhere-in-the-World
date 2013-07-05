@@ -10,7 +10,7 @@
 
         <style>
 			.muted {
-				opacity: 0.6;
+				color: #666666 !important;
 			}
 
 			h1, h2, h3, h4 {
@@ -66,7 +66,7 @@
 
 					<ol>
 						<li class="fragment"><p>datetime - <span class="muted">date, time, datetime, strftime</span></p></li>
-						<li class="fragment"><p>tzinfo - <span class="muted">becoming aware</span></p></li>
+						<li class="fragment"><p>tzinfo - <span class="muted">From Naive to Aware</span></p></li>
 						<li class="fragment"><p>pytz - <span class="muted">Olson database in Python</span></p></li>
 						<li class="fragment"><p>Django - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
 					</ol>
@@ -118,7 +118,7 @@ True
 				</section>
 
 				<section>
-					<h2>Equality</h2>
+					<h2>Equality Checking</h2>
 
 					<pre><code data-trim>
 >>> today = date(2013, 7, 9)
@@ -127,6 +127,26 @@ True
 >>> today == also_today
 True
 					</code></pre>
+				</section>
+
+				<section>
+					<h2>Output Formatting</h2>
+
+					<pre><code data-trim>
+>>> today = date(2013, 7, 9)
+
+>>> today.strftime('%Y-%m-%d')
+'2013-07-09'
+
+>>> today.strftime('%A')
+'Tuesday'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Formatting Definitions</h2>
+					<p>http://docs.python.org/2/library/datetime.html</p>
+					<p class="important"><strong>Bookmark it!</strong></p>
 				</section>
 
 				<section>
@@ -159,6 +179,21 @@ False
 				</section>
 
 				<section>
+					<h2>Output Formatting</h2>
+					<p>Also, just like date()</p>
+
+					<pre><code data-trim>
+>>> t = time(18, 30)
+
+>>> t.strftime('%H:%M')
+'18:30'
+
+>>> t.strftime('%I:%M %p')
+'06:30 PM'
+					</code></pre>
+				</section>
+
+				<section>
 					<h2>Putting it together...</h2>
 				</section>
 
@@ -183,13 +218,15 @@ False
 7
 >>> dt.day
 9
+>>> dt.hour
+6
 
 ...
 						</code></pre>
 				</section>
 
 				<section>
-					<h2>a specific moment <span class="fragment important" data-fragment-index="1">*</span></h2>
+					<h2>A specific moment <span class="fragment important" data-fragment-index="1">*</span></h2>
 					<strong class="fragment important" data-fragment-index="1">* kinda</strong>
 				</section>
 
@@ -199,7 +236,14 @@ False
 				</section>
 
 				<section>
-					<h2>In Portland? NYC? Paris?</h2>
+					<h2 class="muted">In...</h2>
+					<h2 class="fragment">Portland?</h2>
+					<h2 class="fragment">NYC?</h2>
+					<h2 class="fragment">Paris?</h2>
+				</section>
+
+				<section>
+					<h2>Where did it occur?</h2>
 				</section>
 
 				<section>
@@ -211,8 +255,89 @@ False
 				</section>
 
 				<section>
-					<h2>tzinfo links a datetime to a zone</h2>
-					<p>"aware"</p>
+					<h2>tzinfo is the missing piece</h2>
+					<p>Connects a datetime to a time zone</p>
+				</section>
+
+				<section>
+					<h2>Let's take a quick detour...</h2>
+				</section>
+
+				<section>
+					<h2>What makes up a time zone?</h2>
+
+					<ul>
+						<li class="fragment">daylight savings (not always, sorry AZ)</li>
+						<li class="fragment">an offset from <del>GMT</del> UTC</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>UTC?</h2>
+
+					<ul>
+						<li class="fragment">Coordinated Universal Time</li>
+						<li class="fragment">formerly GMT</li>
+						<li class="fragment">no daylight savings, ever</li>
+						<li class="fragment">all other zones are offset from this</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Now we're ready for tzinfo</h2>
+				</section>
+
+				<section>
+					<h1>tzinfo</h1>
+					<p>From Naive to Aware</p>
+				</section>
+
+				<section>
+					<h2>Where do they come from?</h2>
+				</section>
+
+				<section>
+					<h2>You</h2>
+					<p>The stdlib does not define any time zones</p>
+				</section>
+
+				<section>
+					<h2>How do I build one?</h2>
+				</section>
+
+				<section>
+					<h2>tzinfo is an interface</h2>
+					<p>You must implement it</p>
+				</section>
+
+				<section>
+					<h2>We know tzinfo must:</h2>
+
+					<ul>
+						<li class="fragment">define an offset from UTC</li>
+						<li class="fragment">define an offset for daylight savings (if any)</li>
+					</ul>
+				</section>
+
+				<section>
+						<pre><code data-trim>						
+from datetime import tzinfo
+
+class MyTimeZone(tzinfo):
+
+  def utcoffset(self, dt):
+    "What's the offset from UTC?"
+
+  def dst(self, dt):
+    "Is DST in effect?"
+						</code></pre>
+				</section>
+
+				<section>
+						<pre><code data-trim>
+>>> tz = MyTimeZone()
+>>> datetime(..., tzinfo=tz)
+						</code></pre>
 				</section>
 			</div>
 		</div>

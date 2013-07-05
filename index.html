@@ -21,8 +21,28 @@
 				margin-bottom: 40px !important;
 			}
 
+			h2 {
+				font-size: 2em !important;
+			}
+
+			h2 + pre {
+				margin-top: 50px !important;
+			}
+
 			p {
 				font-size: 1.3em !important;
+			}
+
+			code {
+				font-size: 2em !important;
+				line-height: 1.1em !important;
+				max-height: none !important;
+				overflow: hidden !important;
+				padding: 20px !important;
+			}
+
+			.important {
+				color: red;
 			}
         </style>
     </head>
@@ -48,7 +68,7 @@
 						<li class="fragment"><p>datetime - <span class="muted">date, time, datetime, strftime</span></p></li>
 						<li class="fragment"><p>tzinfo - <span class="muted">becoming aware</span></p></li>
 						<li class="fragment"><p>pytz - <span class="muted">Olson database in Python</span></p></li>
-						<li class="fragment"><p>Django localization - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
+						<li class="fragment"><p>Django - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
 					</ol>
 				</section>
 
@@ -62,31 +82,137 @@
 				</section>
 
 				<section>
-					<section>
-						<h2>Datetime</h2>
-						<p class="muted">from datetime import date, time, datetime</p>
-					</section>
+					<h1>datetime</h1>
+					<p class="muted">from datetime import date, time, datetime</p>
+				</section>
 
-					<section>
-						<h3>datetime.date<span class="muted">(year, month, day)</span></h3>
+				<section>
+					<h2>date<span class="muted">(year, month, day)</span></h2>
+				</section>
 
-						<ul>
-							<li class="fragment">just a date, no time</li>
-						</ul>
-
-					</section>
-
-					<section>
+				<section>
 						<pre><code data-trim>
-from datetime import date
+>>> from datetime import date
 
-d = date(2013, 7, 9)
+>>> d = date(2013, 7, 9)
 
-d.year 	#2013
-d.month 	#7
-d.day 	#9
+>>> d.year
+2013
+>>> d.month
+7
+>>> d.day
+9
 						</code></pre>
-					</section>
+				</section>
+
+				<section>
+					<h2>Comparisons</h2>
+
+					<pre><code data-trim>
+>>> today = date(2013, 7, 9)
+>>> yesterday = date(2013, 7, 8)
+
+>>> today > yesterday
+True
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Equality</h2>
+
+					<pre><code data-trim>
+>>> today = date(2013, 7, 9)
+>>> also_today = date(2013, 7, 9)
+
+>>> today == also_today
+True
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>time<span class="muted">(hour, min, sec, microsec)</span></h2>
+				</section>
+
+				<section>
+						<pre><code data-trim>
+>>> from datetime import time
+
+>>> t = time(18, 30)
+
+>>> t.hour
+18
+>>> t.minute
+30
+>>> t.second
+0
+						</code></pre>
+				</section>
+
+				<section>
+					<h2>Comparisons</h2>
+					<p>Just like date()</p>
+
+					<pre><code data-trim>
+>>> time(18, 0) > time(19, 0)
+False
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Putting it together...</h2>
+				</section>
+
+				<section>
+					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec)</span></h2>
+				</section>
+
+				<section>
+					<h2>Both date() and time()</h2>
+					<p>a specific moment</p>
+				</section>
+
+				<section>
+						<pre><code data-trim>
+>>> from datetime import datetime
+
+>>> dt = datetime.now()
+
+>>> dt.year
+2013
+>>> dt.month
+7
+>>> dt.day
+9
+
+...
+						</code></pre>
+				</section>
+
+				<section>
+					<h2>a specific moment <span class="fragment important" data-fragment-index="1">*</span></h2>
+					<strong class="fragment important" data-fragment-index="1">* kinda</strong>
+				</section>
+
+				<section>
+					<h2>datetime<span class="muted">(2013, 7, 9, 18, 30)</span></h2>
+					<p>6:30pm, July 9th 2013</p>
+				</section>
+
+				<section>
+					<h2>In Portland? NYC? Paris?</h2>
+				</section>
+
+				<section>
+					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec)</span></h2>
+				</section>
+
+				<section>
+					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec, <span class="important">tzinfo</span>)</span></h2>
+				</section>
+
+				<section>
+					<h2>tzinfo links a datetime to a zone</h2>
+					<p>"aware"</p>
 				</section>
 			</div>
 		</div>

@@ -66,15 +66,18 @@
 
 					<ol>
 						<li class="fragment"><p>datetime - <span class="muted">date, time, datetime, strftime</span></p></li>
-						<li class="fragment"><p>tzinfo - <span class="muted">From Naive to Aware</span></p></li>
+						<li class="fragment"><p>tzinfo - <span class="muted">From naive to aware</span></p></li>
 						<li class="fragment"><p>pytz - <span class="muted">Olson database in Python</span></p></li>
 						<li class="fragment"><p>Django - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
 					</ol>
 				</section>
 
 				<section>
-					<h3>before we begin...</h3>
-					<h1>why localize?</h1>
+					<h2>Before we begin...</h2>
+				</section>
+
+				<section>
+					<h1>Why Localize?</h1>
 				</section>
 
 				<section>
@@ -145,8 +148,8 @@ True
 
 				<section>
 					<h2>Formatting Definitions</h2>
-					<p>http://docs.python.org/2/library/datetime.html</p>
-					<p class="important"><strong>Bookmark it!</strong></p>
+					<a href="http://docs.python.org/2/library/datetime.html">http://docs.python.org/2/library/datetime.html</a>
+					<p style="margin-top: 25px;">Bookmark it!</p>
 				</section>
 
 				<section>
@@ -207,7 +210,7 @@ False
 				</section>
 
 				<section>
-						<pre><code data-trim>
+					<pre><code data-trim>
 >>> from datetime import datetime
 
 >>> dt = datetime.now()
@@ -222,7 +225,7 @@ False
 6
 
 ...
-						</code></pre>
+					</code></pre>
 				</section>
 
 				<section>
@@ -255,11 +258,6 @@ False
 				</section>
 
 				<section>
-					<h2>tzinfo is the missing piece</h2>
-					<p>Connects a datetime to a time zone</p>
-				</section>
-
-				<section>
 					<h2>Let's take a quick detour...</h2>
 				</section>
 
@@ -289,7 +287,7 @@ False
 
 				<section>
 					<h1>tzinfo</h1>
-					<p>From Naive to Aware</p>
+					<h3 class="muted">From Naive to Aware</h3>
 				</section>
 
 				<section>
@@ -320,7 +318,7 @@ False
 				</section>
 
 				<section>
-						<pre><code data-trim>						
+					<pre><code data-trim>						
 from datetime import tzinfo
 
 class MyTimeZone(tzinfo):
@@ -330,14 +328,111 @@ class MyTimeZone(tzinfo):
 
   def dst(self, dt):
     "Is DST in effect?"
-						</code></pre>
+					</code></pre>
 				</section>
 
 				<section>
-						<pre><code data-trim>
+					<pre><code data-trim>
 >>> tz = MyTimeZone()
 >>> datetime(..., tzinfo=tz)
-						</code></pre>
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Comparisons</h2>
+					<pre><code data-trim>
+>>> tz = MyTimeZone()
+>>> datetime(..., tzinfo=tz)
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Equality &amp; Comparisons</h2>
+					<pre><code data-trim>
+>>> pdx = datetime(2013, 7, 9, 18)
+>>> nyc = datetime(2013, 7, 9, 18)
+>>> pdx == nyc
+True
+
+>>> pdx = pdx.replace(tzinfo=pst)
+>>> nyc = nyc.replace(tzinfo=est)
+>>> pdx == nyc
+False
+>>> pdx > nyc
+True
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Can't someone else build these?</h2>
+				</section>
+
+				<section>
+					<h1>pytz</h1>
+					<h3 class="muted">Olson database in Python</h3>
+					<a href="http://pytz.sourceforge.net/">http://pytz.sourceforge.net/</a>
+				</section>
+
+				<section>
+					<h2>pip install pytz</h2>
+				</section>
+
+				<section>
+					<h2>Olson database</h2>
+					<p>America/Los_Angeles, Europe/Paris, etc</p>
+				</section>
+
+				<section>
+					<h2>Easy tzinfo</h2>
+
+					<pre><code data-trim>
+>>> from pytz import timezone
+
+>>> pst = 'America/Los_Angeles'
+>>> pst_tz = timezone(pst)
+					</code></pre>
+
+					<p class="muted">`pst_tz` implements tzinfo</p>
+				</section>
+
+				<section>
+					<h2>Localize</h2>
+
+					<pre><code data-trim>
+>>> pdx = pst_tz.localize(now())
+					</code></pre>
+
+					<p class="muted">`pdx` is now in PST zone</p>
+				</section>
+
+				<section>
+					<h2>Also useful...</h2>
+				</section>
+
+				<section>
+					<h2>Big ol' list of zones</h2>
+					<pre><code data-trim>
+>>> import pytz
+>>> pytz.common_timezones
+['Africa/Abidjan', 'Africa/Accra',
+'Africa/Addis_Ababa', 'Africa/Algiers',
+'Africa/Asmara', ...]
+					</code></pre>
+
+					<p class="muted">Great for &lt;select&gt; menus</p>
+				</section>
+
+				<section>
+					<h2>Zones by country</h2>
+
+					<pre><code data-trim>
+>>> import pytz
+>>> pytz.country_timezones['US']
+['America/New_York',
+'America/Detroit',
+'America/Kentucky/Louisville',
+'America/Kentucky/Monticello', ...]
+					</code></pre>
 				</section>
 			</div>
 		</div>

@@ -65,9 +65,9 @@
 					<h1>Agenda</h1>
 
 					<ol>
-						<li class="fragment"><p>datetime - <span class="muted">date, time, datetime, strftime</span></p></li>
-						<li class="fragment"><p>tzinfo - <span class="muted">From naive to aware</span></p></li>
-						<li class="fragment"><p>pytz - <span class="muted">Olson database in Python</span></p></li>
+						<li class="fragment"><p>Dates &amp; Times - <span class="muted">the basics of datetime</span></p></li>
+						<li class="fragment"><p>Formatting &amp; Translation - <span class="muted">mm/dd/yyyy, etc</span></p></li>
+						<li class="fragment"><p>Time Zones &amp; DST - <span class="muted">IRL hack meets code</span></p></li>
 						<li class="fragment"><p>Django - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
 					</ol>
 				</section>
@@ -85,12 +85,25 @@
 				</section>
 
 				<section>
-					<h1>datetime</h1>
-					<p class="muted">from datetime import date, time, datetime</p>
+					<h1>Dates &amp; Times</h1>
+					<p class="muted">Basic date/time handling in Python</p>
 				</section>
 
 				<section>
+					<h2>import datetime</h2>
+				</section>
+	
+				<section>
 					<h2>date<span class="muted">(year, month, day)</span></h2>
+				</section>
+
+				<section>
+					<h2>Use Cases</h2>
+
+					<ul>
+						<li>Birthdays, Anniversaries</li>
+						<li>Anything that doesn't need time-level precision</li>
+					</ul>
 				</section>
 
 				<section>
@@ -129,31 +142,32 @@ True
 
 >>> today == also_today
 True
+
+>>> today is also_today
+False
 					</code></pre>
 				</section>
 
 				<section>
-					<h2>Output Formatting</h2>
+					<h2>Convenience</h2>
 
 					<pre><code data-trim>
->>> today = date(2013, 7, 9)
-
->>> today.strftime('%Y-%m-%d')
-'2013-07-09'
-
->>> today.strftime('%A')
-'Tuesday'
+>>> date.today()
+datetime.date(2013, 7, 9)
 					</code></pre>
-				</section>
-
-				<section>
-					<h2>Formatting Definitions</h2>
-					<a href="http://docs.python.org/2/library/datetime.html">http://docs.python.org/2/library/datetime.html</a>
-					<p style="margin-top: 25px;">Bookmark it!</p>
 				</section>
 
 				<section>
 					<h2>time<span class="muted">(hour, min, sec, microsec)</span></h2>
+				</section>
+
+				<section>
+					<h2>Use Cases</h2>
+
+					<ul>
+						<li>Work Hours</li>
+						<li>Anything that isn't anchored to a specific date</li>
+					</ul>
 				</section>
 
 				<section>
@@ -172,32 +186,22 @@ True
 				</section>
 
 				<section>
-					<h2>Comparisons</h2>
+					<h2>Comparisons &amp; Equality</h2>
 					<p>Just like date()</p>
 
 					<pre><code data-trim>
->>> time(18, 0) > time(19, 0)
-False
+#7pm is after 6pm
+>>> time(19, 0) > time(18, 0)
+True
+
+#8:30am equals 8:30am
+>>> time(8, 30) == time(8, 30)
+True
 					</code></pre>
 				</section>
 
 				<section>
-					<h2>Output Formatting</h2>
-					<p>Also, just like date()</p>
-
-					<pre><code data-trim>
->>> t = time(18, 30)
-
->>> t.strftime('%H:%M')
-'18:30'
-
->>> t.strftime('%I:%M %p')
-'06:30 PM'
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Putting it together...</h2>
+					<h2>Put them together...</h2>
 				</section>
 
 				<section>
@@ -205,15 +209,20 @@ False
 				</section>
 
 				<section>
-					<h2>Both date() and time()</h2>
-					<p>a specific moment</p>
+					<h2>Use Cases</h2>
+
+					<ul>
+						<li>Scheduling</li>
+						<li>Logging events</li>
+						<li>Anytime you need to know an exact moment</li>
+					</ul>
 				</section>
 
 				<section>
 					<pre><code data-trim>
 >>> from datetime import datetime
 
->>> dt = datetime.now()
+>>> dt = datetime(2013, 7, 9, 6)
 
 >>> dt.year
 2013
@@ -229,40 +238,262 @@ False
 				</section>
 
 				<section>
-					<h2>A specific moment <span class="fragment important" data-fragment-index="1">*</span></h2>
-					<strong class="fragment important" data-fragment-index="1">* kinda</strong>
+					<h2>Comparisons &amp; Equality</h2>
+					<p>Just like date() and time()</p>
 				</section>
 
 				<section>
-					<h2>datetime<span class="muted">(2013, 7, 9, 18, 30)</span></h2>
-					<p>6:30pm, July 9th 2013</p>
+					<h2>Convenience</h2>
+
+					<pre><code data-trim>
+>>> datetime.now()
+datetime(2013, 7, 9, 6, 30, ...)
+					</code></pre>
 				</section>
 
 				<section>
-					<h2 class="muted">In...</h2>
-					<h2 class="fragment">Portland?</h2>
-					<h2 class="fragment">NYC?</h2>
-					<h2 class="fragment">Paris?</h2>
+					<h2>Recap</h2>
+
+					<ul>
+						<li>date<span class="muted">(year, month, day)</span></li>
+						<li>time<span class="muted">(hour, min, sec, microsec)</span></li>
+						<li>datetime<span class="muted">(year, month, day, hour, min, sec, microsec)</span></li>
+					</ul>
 				</section>
 
 				<section>
-					<h2>Where did it occur?</h2>
+					<h1>Formatting &amp; Translation</h1>
+					<h3 class="muted">strftime, locale</h3>
+				</section>
+	
+				<section>
+					<pre><code data-trim>
+>>> d = date(2013, 7, 9)
+					</code></pre>
 				</section>
 
 				<section>
-					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec)</span></h2>
+					<pre><code data-trim>
+>>> print d
+2013-07-09
+					</code></pre>
 				</section>
 
 				<section>
-					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec, <span class="important">tzinfo</span>)</span></h2>
+					<h2>What if I want to...</h2>
+					<ul>
+						<li><p>use slashes instead of dashes?</p></li>
+						<li><p>use mm/dd/yyyy instead of yyyy/mm/dd?</p></li>
+					</ul>
 				</section>
 
 				<section>
-					<h2>Let's take a quick detour...</h2>
+					<h2>strftime<span class="muted">(format)</span></h2>
+					<p>"Return a string representing the date, controlled by an explicit format string."</p>
 				</section>
 
 				<section>
-					<h2>What makes up a time zone?</h2>
+					<pre><code data-trim>
+>>> d.strftime('%Y/%m/%d')
+'2013/07/09'
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> d.strftime('%m/%d/%Y')
+'07/09/2013'
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> d.strftime('%A during %B')
+'Tuesday during July'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Formatting Definitions</h2>
+					<a href="http://docs.python.org/2/library/datetime.html">http://docs.python.org/2/library/datetime.html</a>
+					<p style="margin-top: 25px;">Bookmark it!</p>
+				</section>
+
+				<section>
+					<h2>Not Just for Dates</h2>
+				</section>
+	
+				<section>
+					<h2>time</h2>
+
+					<pre><code data-trim>
+>>> t = time(18, 30)
+
+>>> t.strftime('%I:%M %p')
+'06:30 PM'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>datetime</h2>
+
+					<pre><code data-trim>
+>>> dt = datetime(2013,7,9,18,30)
+
+>>> dt.strftime('%m/%d/%Y %I:%M%p')
+'07/09/2013 06:30PM'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Ready to take on the world?</h2>
+
+					<ul>
+						<li>Sweden - yyyy/mm/dd</li>
+						<li>France - dd/mm/yyyy</li>
+						<li>USA - mm/dd/yyyy (wtf...)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>I'll just...</h2>
+
+					<pre><code data-trim>
+if COUNTRY == 'USA':
+  print d.strftime('%m/%d/%Y')
+
+elif COUNTRY == 'FRANCE':
+  print d.strftime('%d/%m/%Y')
+
+elif COUNTRY == 'SWEDEN':
+  print d.strftime('%Y/%m/%d')
+
+...
+					</code></pre>
+
+					<h2>...nevermind</h2>
+				</section>
+
+				<section>
+					<h2>We Need Locale-aware Formatting</h2>
+				</section>
+
+				<section>
+					<h2>What is a locale?</h2>
+					<p>Regional formatting rules &amp; translations</p>
+				</section>
+
+				<section>
+					<h2>Locale Codes</h2>
+					<p>en_US, fr_CA, de_DE, etc</p>
+				</section>
+
+				<section>
+					<h2>import locale</h2>
+				</section>
+
+				<section>
+					<h2>setlocale<span class="muted">(category, locale)</span></h2>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> from locale import setlocale
+>>> setlocale(0, "en_US.utf-8")
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> setlocale(0, 'fr_CA.utf-8')
+>>> d.strftime('%m/%d/%Y')
+'07/09/2013'
+					</code></pre>
+				</section>
+
+				<section>
+					<h1>%x</h1>
+					<p>"Locale's appropriate date representation"</p>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> setlocale(0, 'fr_CA.utf-8')
+>>> d.strftime('%x')
+'09.07.2013'
+					</code></pre>
+				</section>
+
+				<section>
+					<h1>%X</h1>
+					<p>"Locale's appropriate time representation"</p>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> t = time(18, 30)
+
+>>> setlocale(0, "fr_CA.utf-8")
+>>> t.strftime('%X')
+'18:30:00'
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+>>> dt = datetime(2013,7,9,18,30)
+
+>>> setlocale(0, "fr_CA.utf-8")
+>>> dt.strftime('%X, %x')
+'18:30:00, 09.07.2013'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Also, Translations</h2>
+
+					<pre><code data-trim>
+>>> setlocale(0, "fr_CA.utf-8")
+>>> d.strftime('%B')
+'juillet'
+
+>>> setlocale(0, "de_DE.utf-8")
+>>> d.strftime('%B')
+'Juli'
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Built-in Locales</h2>
+
+					<pre><code data-trim>
+$ locale -a
+af_ZA
+af_ZA.ISO8859-1
+af_ZA.ISO8859-15
+af_ZA.UTF-8
+am_ET
+am_ET.UTF-8
+...
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Recap</h2>
+
+					<ul>
+						<li><p>strftime - <span class="muted">format datetimes into strings</span></p></li>
+						<li><p>locale - <span class="muted">change region/language of formats</span></p></li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Time Zones &amp; Daylight Savings</h1>
+					<p>tzinfo, pytz</p>
+				</section>
+
+				<section>
+					<h2>What is a time zone?</h2>
 
 					<ul>
 						<li class="fragment">daylight savings (not always, sorry AZ)</li>
@@ -276,48 +507,69 @@ False
 					<ul>
 						<li class="fragment">Coordinated Universal Time</li>
 						<li class="fragment">formerly GMT</li>
-						<li class="fragment">no daylight savings, ever</li>
-						<li class="fragment">all other zones are offset from this</li>
+						<li class="fragment">no daylight savings</li>
+						<li class="fragment">all other zones are offset from it</li>
 					</ul>
 				</section>
+				
+				<!--
+				<section>
+					<h2>utcnow()</h2>
+
+					<pre><code data-trim>	
+>>> from datetime import datetime
+
+>>> datetime.now()
+datetime(2013, 7, 9, 16, 30, ...)
+
+>>> datetime.utcnow()
+datetime(2013, 7, 9, 23, 30, ...)
+					</code></pre>
+				</section>
+				-->
 
 				<section>
-					<h2>Now we're ready for tzinfo</h2>
+					<h2>datetime<span class="muted">(2013, 7, 9, 18, 30)</span></h2>
+					<p>6:30pm, July 9th 2013</p>
 				</section>
 
 				<section>
-					<h1>tzinfo</h1>
-					<h3 class="muted">From Naive to Aware</h3>
+					<h2>Represents a specific moment <span class="fragment important" data-fragment-index="1">*</span></h2>
+					<strong class="fragment important" data-fragment-index="1">* kinda</strong>
 				</section>
 
 				<section>
-					<h2>Where do they come from?</h2>
+					<h2>Where did it occur?</h2>
+					<h2 class="fragment">Portland?</h2>
+					<h2 class="fragment">NYC?</h2>
+					<h2 class="fragment">Paris?</h2>
 				</section>
 
 				<section>
-					<h2>You</h2>
-					<p>The stdlib does not define any time zones</p>
+					<h2>We need more information</h2>
 				</section>
 
 				<section>
-					<h2>How do I build one?</h2>
+					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec)</span></h2>
 				</section>
 
 				<section>
-					<h2>tzinfo is an interface</h2>
-					<p>You must implement it</p>
+					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec, <span class="important">tzinfo</span>)</span></h2>
 				</section>
 
 				<section>
-					<h2>We know tzinfo must:</h2>
-
-					<ul>
-						<li class="fragment">define an offset from UTC</li>
-						<li class="fragment">define an offset for daylight savings (if any)</li>
-					</ul>
+					<h2>Naive vs Aware</h2>
+					<p>tzinfo makes a datetime aware</p>
 				</section>
 
 				<section>
+					<h2>No Built-in Time Zones</h2>
+					<p>datetime expects you to implement your own</p>
+				</section>
+
+				<section>
+					<h2>Implementing tzinfo</h2>
+
 					<pre><code data-trim>						
 from datetime import tzinfo
 
@@ -332,39 +584,17 @@ class MyTimeZone(tzinfo):
 				</section>
 
 				<section>
+					<h2>Applying tzinfo</h2>
+
 					<pre><code data-trim>
 >>> tz = MyTimeZone()
->>> datetime(..., tzinfo=tz)
+
+#during instantiation
+>>> dt = datetime(..., tzinfo=tz)
+
+#after instantiation
+>>> dt = dt.replace(tzinfo=tz)
 					</code></pre>
-				</section>
-
-				<section>
-					<h2>Comparisons</h2>
-					<pre><code data-trim>
->>> tz = MyTimeZone()
->>> datetime(..., tzinfo=tz)
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Equality &amp; Comparisons</h2>
-					<pre><code data-trim>
->>> pdx = datetime(2013, 7, 9, 18)
->>> nyc = datetime(2013, 7, 9, 18)
->>> pdx == nyc
-True
-
->>> pdx = pdx.replace(tzinfo=pst)
->>> nyc = nyc.replace(tzinfo=est)
->>> pdx == nyc
-False
->>> pdx > nyc
-True
-					</code></pre>
-				</section>
-
-				<section>
-					<h2>Can't someone else build these?</h2>
 				</section>
 
 				<section>
@@ -378,37 +608,154 @@ True
 				</section>
 
 				<section>
-					<h2>Olson database</h2>
+					<h2>Olson Database</h2>
 					<p>America/Los_Angeles, Europe/Paris, etc</p>
 				</section>
 
 				<section>
-					<h2>Easy tzinfo</h2>
+					<h2>Prebuilt Time Zones</h2>
 
 					<pre><code data-trim>
 >>> from pytz import timezone
+>>> from datetime import datetime
 
 >>> pst = 'America/Los_Angeles'
 >>> pst_tz = timezone(pst)
-					</code></pre>
 
-					<p class="muted">`pst_tz` implements tzinfo</p>
+>>> datetime(..., tzinfo=pst_tz)
+					</code></pre>
 				</section>
 
 				<section>
-					<h2>Localize</h2>
+					<h2>Localize: Raising Awareness</h2>
 
 					<pre><code data-trim>
->>> pdx = pst_tz.localize(now())
-					</code></pre>
+#naive
+>>> dt = datetime(2013,7,9,18,30)
 
-					<p class="muted">`pdx` is now in PST zone</p>
+#aware
+>>> dt = pst_tz.localize(dt)
+					</code></pre>
+				</section>
+				
+				<section>
+					<h2>Equality &amp; Comparisons</h2>
+					<pre><code data-trim>
+>>> pst = timezone('US/Pacific')
+>>> est = timezone('US/Eastern')
+
+>>> now = datetime.now()
+>>> pdx = pst.localize(now)
+>>> nyc = est.localize(now)
+
+>>> pdx == nyc
+False
+>>> pdx > nyc
+True
+					</code></pre>
 				</section>
 
 				<section>
-					<h2>Also useful...</h2>
+					<h2>Moving between zones</h2>
+
+					<pre><code data-trim>
+>>> now = datetime.now()
+>>> dt_pst = pst.localize(now)
+
+>>> dt_pst.strftime('%I:%M %p')
+'06:30 pm'
+
+>>> dt_est = dt_pst.astimezone(est)
+>>> dt_est.strftime('%I:%M %p')
+'09:30 pm'
+					</code></pre>
 				</section>
 
+				<section>
+					<h2>Gotcha: Localize</h2>
+
+					<pre><code data-trim>
+>>> dt_pst.strftime('%I:%M %p')
+'06:30 pm'
+
+>>> dt_est = est.localize(dt_pst)
+
+>>> dt_est.strftime('%I:%M %p')
+'06:30 pm'
+					</code></pre>
+
+					<p>Localize replaces tzinfo, won't change the time</p>
+				</section>
+				
+				<!-- django -->
+
+				<section>
+					<h1>Django</h1>
+				</section>
+
+				<section>
+					<p>First things first</p>
+					<h1>Forget<br>Everything</h1>
+					<p>Django has it's own rules</p>
+				</section>
+
+				<section>
+					<h2>Settings</h2>
+
+					<pre><code data-trim>
+USE_TZ = True
+USE_L10N = True
+TIME_ZONE = 'UTC'
+					</code></pre>
+				</section>
+
+				<section>
+					<pre><code data-trim>
+USE_TZ = True
+					</code></pre>
+
+					<ul>
+						<li>Django returns aware datetimes from models.DateTimeField</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Formatting</h2>
+					<p>from django.utils.formats import date_format, time_format</p>
+				</section>
+
+				<section>
+					<h2>django.utils.timezone.activate</h2>
+				</section>
+
+				<section>
+					<h3>views.py</h3>
+
+					<pre><code data-trim>
+from django.utils import timezone
+
+def my_view(req):
+  tz = yourcode.get_tz(req)
+
+  timezone.activate(tz)
+  return render_to_response(tmpl)
+					</code></pre>
+
+					<h3>tmpl</h3>
+
+					<pre><code data-trim>
+&lt;!-- outputs in tz --&gt;
+{{ user.date_joined|date }}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Switching Languages</h2>
+					<p>from django.utils.translation import activate, deactivate</p>
+				</section>
+
+
+				<!--
 				<section>
 					<h2>Big ol' list of zones</h2>
 					<pre><code data-trim>
@@ -433,7 +780,10 @@ True
 'America/Kentucky/Louisville',
 'America/Kentucky/Monticello', ...]
 					</code></pre>
+
+					<p class="muted">Handy for &lt;select&gt; with &lt;optgroup&gt;</p>
 				</section>
+				-->
 			</div>
 		</div>
 

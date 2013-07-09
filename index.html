@@ -62,26 +62,24 @@
 				</section>
 
 				<section>
+					<h1>Localization?</h1>
+
+					<ul>
+						<li class="fragment"><p>formatting</p></li>
+						<li class="fragment"><p>translation</p></li>
+						<li class="fragment"><p>time zones</p></li>
+					</ul>
+				</section>
+
+				<section>
 					<h1>Agenda</h1>
 
 					<ol>
 						<li class="fragment"><p>Dates &amp; Times - <span class="muted">the basics of datetime</span></p></li>
-						<li class="fragment"><p>Formatting &amp; Translation - <span class="muted">mm/dd/yyyy, etc</span></p></li>
+						<li class="fragment"><p>Formatting &amp; Translation - <span class="muted">locale</span></p></li>
 						<li class="fragment"><p>Time Zones &amp; DST - <span class="muted">IRL hack meets code</span></p></li>
 						<li class="fragment"><p>Django - <span class="muted">USE_TZ, django.utils, templates</span></p></li>
 					</ol>
-				</section>
-
-				<section>
-					<h2>Before we begin...</h2>
-				</section>
-
-				<section>
-					<h1>Why Localize?</h1>
-				</section>
-
-				<section>
-					<h2>[map of world]</h2>
 				</section>
 
 				<section>
@@ -201,10 +199,6 @@ True
 				</section>
 
 				<section>
-					<h2>Put them together...</h2>
-				</section>
-
-				<section>
 					<h2>datetime<span class="muted">(year, month, day, hour, min, sec, microsec)</span></h2>
 				</section>
 
@@ -247,7 +241,7 @@ True
 
 					<pre><code data-trim>
 >>> datetime.now()
-datetime(2013, 7, 9, 6, 30, ...)
+>>> datetime.combine(d, t)
 					</code></pre>
 				</section>
 
@@ -453,6 +447,9 @@ elif COUNTRY == 'SWEDEN':
 					<h2>Also, Translations</h2>
 
 					<pre><code data-trim>
+>>> d.strftime('%B')
+'July'
+
 >>> setlocale(0, "fr_CA.utf-8")
 >>> d.strftime('%B')
 'juillet'
@@ -539,14 +536,10 @@ datetime(2013, 7, 9, 23, 30, ...)
 				</section>
 
 				<section>
-					<h2>Where did it occur?</h2>
-					<h2 class="fragment">Portland?</h2>
-					<h2 class="fragment">NYC?</h2>
-					<h2 class="fragment">Paris?</h2>
-				</section>
-
-				<section>
-					<h2>We need more information</h2>
+					<h2>Where?</h2>
+					<h2 class="muted">Portland?</h2>
+					<h2 class="muted">NYC?</h2>
+					<h2 class="muted">Paris?</h2>
 				</section>
 
 				<section>
@@ -604,12 +597,12 @@ class MyTimeZone(tzinfo):
 				</section>
 
 				<section>
-					<h2>pip install pytz</h2>
+					<h2>Olson Database</h2>
+					<p>America/Los_Angeles, Europe/Paris, etc</p>
 				</section>
 
 				<section>
-					<h2>Olson Database</h2>
-					<p>America/Los_Angeles, Europe/Paris, etc</p>
+					<h2>pip install pytz</h2>
 				</section>
 
 				<section>
@@ -656,7 +649,7 @@ True
 				</section>
 
 				<section>
-					<h2>Moving between zones</h2>
+					<h2>Moving Between Zones</h2>
 
 					<pre><code data-trim>
 >>> now = datetime.now()
@@ -687,6 +680,18 @@ True
 					<p>Localize replaces tzinfo, won't change the time</p>
 				</section>
 				
+				<section>
+					<h2>Recap</h2>
+
+					<ul>
+						<li><p>DST + UTC offset = time zone</p></li>
+						<li><p>tzinfo - aware datetimes</p></li>
+						<li><p>pytz - Olson database</p></li>
+						<li><p>localize() - apply tzinfo</p></li>
+						<li><p>astimezone() - change zone</p></li>
+					</ul>
+				</section>
+
 				<!-- django -->
 
 				<section>
@@ -696,36 +701,102 @@ True
 				<section>
 					<p>First things first</p>
 					<h1>Forget<br>Everything</h1>
-					<p>Django has it's own rules</p>
+					<p>Django has it's own playground</p>
+				</section>
+
+				<section>
+					<h2>Formatting &amp; Locale</h2>
 				</section>
 
 				<section>
 					<h2>Settings</h2>
 
 					<pre><code data-trim>
-USE_TZ = True
+#enable locales
+USE_I18N = True
+
+#enable localized date formatting
 USE_L10N = True
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Changing Locales</h2>
+					<pre><code data-trim>
+from django.utils import translation
+translation.activate('en_US')
+					</code></pre>
+
+					<p>Works in any runtime code</p>
+				</section>
+
+				<section>
+					<h3>views.py</h3>
+
+					<pre><code data-trim>
+from django.utils import translation
+
+def my_view(req):
+  locale = req.user.locale
+  translation.activate(locale)
+  return render_to_response(tmpl)
+					</code></pre>
+
+					<h3>tmpl</h3>
+
+					<pre><code data-trim>
+&lt;!-- outputs in locale's format --&gt;
+&lt;p&gt;{{ user.date_joined|date }}&lt;/p&gt;
+					</code></pre>
+				</section>
+
+				<section>
+					
+					<pre><code data-trim>
+{{val|time:"TIME_FORMAT"}}
+					</code></pre>
+
+					<pre><code data-trim>
+{{val|date:"DATE_FORMAT"}}
+					</code></pre>
+
+					<pre><code data-trim>
+{{val|date:"SHORT_DATE_FORMAT"}}
+					</code></pre>
+
+					<pre><code data-trim>
+{{val|date:"DATETIME_FORMAT"}}
+					</code></pre>
+
+					<pre><code data-trim>
+{{val|date:"SHORT_DATETIME_FORMAT"}}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Time Zones</h2>
+				</section>
+
+				<section>
+					<h2>Settings</h2>
+
+					<pre><code data-trim>
+#localizes internal dates to UTC
+USE_TZ = True
+
+#default time zone
 TIME_ZONE = 'UTC'
 					</code></pre>
 				</section>
 
 				<section>
+					<h2>Changing Time Zone</h2>
 					<pre><code data-trim>
-USE_TZ = True
+from django.utils import timezone
+timezone.activate('US/Pacific')
 					</code></pre>
 
-					<ul>
-						<li>Django returns aware datetimes from models.DateTimeField</li>
-					</ul>
-				</section>
-
-				<section>
-					<h2>Formatting</h2>
-					<p>from django.utils.formats import date_format, time_format</p>
-				</section>
-
-				<section>
-					<h2>django.utils.timezone.activate</h2>
+					<p>Works in any runtime code</p>
 				</section>
 
 				<section>
@@ -735,9 +806,7 @@ USE_TZ = True
 from django.utils import timezone
 
 def my_view(req):
-  tz = yourcode.get_tz(req)
-
-  timezone.activate(tz)
+  timezone.activate(req.user.tz)
   return render_to_response(tmpl)
 					</code></pre>
 
@@ -745,17 +814,89 @@ def my_view(req):
 
 					<pre><code data-trim>
 &lt;!-- outputs in tz --&gt;
-{{ user.date_joined|date }}
+&lt;p&gt;{{ user.date_joined|date }}&lt;/p&gt;
 					</code></pre>
 				</section>
 
 				<section>
-					<h2>Switching Languages</h2>
-					<p>from django.utils.translation import activate, deactivate</p>
+					<h2>django-globetrotter</h2>
+					<a href="https://github.com/jarcoal/django-globetrotter">https://github.com/jarcoal/django-globetrotter</a>
 				</section>
 
+				<section>
+					<h2>LanguageField</h2>
 
-				<!--
+					<pre><code data-trim>
+from globetrotter import fields
+
+class User(AbstractUser):
+  language = fields.LanguageField()
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>UserLanguageMiddleware</h2>
+
+					<pre><code data-trim>
+MIDDLEWARE_CLASSES = (
+  'globetrotter.middleware.UserLanguageMiddleware'
+  ...
+)
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>TimeZoneField</h2>
+
+					<pre><code data-trim>
+from globetrotter import fields
+
+class User(AbstractUser):
+ time_zone = fields.TimeZoneField()
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>UserTimeZoneMiddleware</h2>
+
+					<pre><code data-trim>
+MIDDLEWARE_CLASSES = (
+  'globetrotter.middleware.UserTimeZoneMiddleware'
+  ...
+)
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Recap</h2>
+
+					<ul>
+						<li><p>USE_I18N/USE_L10N - <span class="muted">enable locales</span></p></li>
+						<li><p>translation.activate - <span class="muted">change locales</span></p></li>
+						<li><p>USE_TZ - <span class="muted">enable aware datetimes</span></p></li>
+						<li><p>timezone.activate - <span class="muted">change time zone</span></p></li>
+						<li><p>django-globetrotter - <span class="muted">locale/zone by user</span></p></li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Tips &amp; Tricks</h1>
+				</section>
+
+				<section>
+					<h2>JSON</h2>
+					<pre><code data-trim>
+def handler(obj):
+  if isinstance(obj, datetime):
+    return obj.isoformat()
+
+  return None
+
+dt = datetime.now()
+json.dumps(dt, default=handler)
+					</code></pre>
+				</section>
+
 				<section>
 					<h2>Big ol' list of zones</h2>
 					<pre><code data-trim>
@@ -783,7 +924,6 @@ def my_view(req):
 
 					<p class="muted">Handy for &lt;select&gt; with &lt;optgroup&gt;</p>
 				</section>
-				-->
 			</div>
 		</div>
 

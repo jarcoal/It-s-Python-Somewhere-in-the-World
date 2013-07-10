@@ -283,7 +283,6 @@ True
 
 				<section>
 					<h2>strftime<span class="muted">(format)</span></h2>
-					<p>"Return a string representing the date, controlled by an explicit format string."</p>
 				</section>
 
 				<section>
@@ -369,7 +368,7 @@ elif COUNTRY == 'SWEDEN':
 				</section>
 
 				<section>
-					<h2>We Need Locale-aware Formatting</h2>
+					<h2>We need locale-aware formatting</h2>
 				</section>
 
 				<section>
@@ -508,22 +507,6 @@ am_ET.UTF-8
 						<li class="fragment">all other zones are offset from it</li>
 					</ul>
 				</section>
-				
-				<!--
-				<section>
-					<h2>utcnow()</h2>
-
-					<pre><code data-trim>	
->>> from datetime import datetime
-
->>> datetime.now()
-datetime(2013, 7, 9, 16, 30, ...)
-
->>> datetime.utcnow()
-datetime(2013, 7, 9, 23, 30, ...)
-					</code></pre>
-				</section>
-				-->
 
 				<section>
 					<h2>datetime<span class="muted">(2013, 7, 9, 18, 30)</span></h2>
@@ -680,6 +663,28 @@ True
 					<p>Localize replaces tzinfo, won't change the time</p>
 				</section>
 				
+				
+				<section>
+					<h2>datetime.utcnow()</h2>
+
+					<pre><code data-trim>	
+>>> from datetime import datetime
+
+>>> datetime.now()
+datetime(2013, 7, 9, 16, 30, ...)
+
+>>> datetime.utcnow()
+datetime(2013, 7, 9, 23, 30, ...)
+					</code></pre>
+				</section>
+				
+				<section>
+					<pre><code data-trim>	
+>>> naive = datetime.utcnow()
+>>> aware = pytz.utc.localize(now)
+					</code></pre>
+				</section>
+
 				<section>
 					<h2>Recap</h2>
 
@@ -880,7 +885,43 @@ MIDDLEWARE_CLASSES = (
 				</section>
 
 				<section>
+					<h1>Gotchas</h1>
+				</section>
+
+				<section>
+					<h2>Comparing Naive to Aware</h2>
+
+					<pre><code data-trim>
+>>> naive_dt == aware_dt
+Traceback (most recent call last):
+File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+TypeError: can't compare offset-
+  naive and offset-aware datetimes
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>%s</h2>
+
+					<pre><code data-trim>
+>>> dt.strftime('%s')
+1373379257
+					</code></pre>
+
+					<h2>Don't use it!</h2>
+				</section>
+
+				<section>
 					<h1>Tips &amp; Tricks</h1>
+				</section>
+
+				<section>
+					<h2>Aware Now</h2>
+
+					<pre><code data-trim>	
+>>> naive = datetime.utcnow()
+>>> aware = pytz.utc.localize(now)
+					</code></pre>
 				</section>
 
 				<section>
@@ -923,6 +964,20 @@ json.dumps(dt, default=handler)
 					</code></pre>
 
 					<p class="muted">Handy for &lt;select&gt; with &lt;optgroup&gt;</p>
+				</section>	
+
+				<section>
+					<h2>Helpful Libraries</h2>
+
+					<ul>
+						<li><p>Babel - <a href="http://babel.edgewall.org/">http://babel.edgewall.org/</a></p></li>
+						<li><p>dateutil - <a href="http://labix.org/python-dateutil">http://labix.org/python-dateutil</a></p></li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>That's all!</h2>
+					<p>Thanks for listening</p>
 				</section>
 			</div>
 		</div>
